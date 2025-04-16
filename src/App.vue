@@ -1,8 +1,9 @@
 <template>
-  <div class="text-2xl font-semibold text-red-400">Hello world</div>
+  <RouterView />
 </template>
 <script setup>
 import { onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 
 onMounted(() => {
