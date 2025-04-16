@@ -39,10 +39,10 @@
 </template>
 <script setup>
 import { reactive } from 'vue'
-import InputText from '@/components/forms/InputField.vue'
-import PasswordText from '@/components/forms/PasswordField.vue'
-import Checkbox from '@/components/forms/CheckboxField.vue'
-import ActionButton from '@/components/actions/ActionButton.vue'
+import InputText from '@/components/base/BaseInput.vue'
+import PasswordText from '@/components/base/BasePassword.vue'
+import Checkbox from '@/components/base/BaseCheckbox.vue'
+import ActionButton from '@/components/base/BaseButton.vue'
 import logo from '../assets/praxxys-logo.webp'
 
 const model = reactive({
