@@ -6,7 +6,7 @@
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       v-bind="$attrs"
-      class="border rounded-lg block w-full p-2.5"
+      class="border rounded-lg block p-2.5"
       :class="{
         'bg-gray-50 border-gray-300 text-gray-900 focus:ring-teal-600 focus:border-teal-600':
           error === null,
@@ -28,7 +28,7 @@ defineProps({
   },
   error: {
     type: String,
-    default: '',
+    default: null,
   },
 })
 

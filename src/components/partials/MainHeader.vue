@@ -15,36 +15,8 @@
           </svg>
           <span class="sr-only">Toggle sidebar</span>
         </button>
-        <a href="#" class="flex items-center justify-between mr-4">
+        <div class="flex items-center justify-between h-10 mr-4">
           <img :src="logo" class="mr-3 h-4" alt="Praxxys Logo" />
-        </a>
-      </div>
-      <div class="flex items-center lg:order-2">
-        <button
-          type="button"
-          class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300"
-          id="user-menu-button"
-          aria-expanded="false"
-          data-dropdown-toggle="dropdown">
-          <span class="sr-only">Open user menu</span>
-          <img class="w-8 h-8 rounded-full" :src="avatar" alt="user photo" />
-        </button>
-        <!-- Dropdown menu -->
-        <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow" id="dropdown">
-          <div class="py-3 px-4">
-            <span class="block text-sm font-semibold text-gray-900">Neil Sims</span>
-           <span class="block text-sm text-gray-900 truncate">name@flowbite.com</span>
-          </div>
-          <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
-            <li>
-              <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">My profile</a>
-            </li>
-          </ul>
-          <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
-            <li>
-              <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Sign out</a>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -52,5 +24,4 @@
 </template>
 <script setup>
 import logo from '@/assets/praxxys-logo.webp'
-import avatar from '@/assets/avatar-male.png'
 </script>

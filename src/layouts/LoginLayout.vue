@@ -14,6 +14,7 @@
               v-model="model.username"
               label="Username"
               placeholder="Username or Email"
+              class="w-full"
               @keydown="errors.username = null"
               :error="errors.username" />
 
@@ -25,7 +26,7 @@
               <a href="#" class="text-sm font-medium text-teal-600 hover:underline">Forgot password?</a >
             </div>
 
-            <ActionButton type="button" label="Sign in"/>
+            <BaseButton type="button" label="Sign in" class="w-full text-white bg-teal-600 hover:bg-teal-700" />
 
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?
@@ -42,7 +43,7 @@ import { reactive } from 'vue'
 import InputText from '@/components/base/BaseInput.vue'
 import PasswordText from '@/components/base/BasePassword.vue'
 import Checkbox from '@/components/base/BaseCheckbox.vue'
-import ActionButton from '@/components/base/BaseButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import logo from '../assets/praxxys-logo.webp'
 
 const model = reactive({

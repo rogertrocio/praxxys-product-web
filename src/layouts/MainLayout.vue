@@ -7,7 +7,7 @@
     <MainSidebar />
 
     <main class="p-4 md:ml-64 h-auto pt-20">
-      <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-xs h-[calc(100vh-8rem)]">
+      <div class="h-[calc(100vh-8rem)] mb-4">
         <RouterView />
       </div>
     </main>
