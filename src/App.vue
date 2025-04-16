@@ -3,7 +3,7 @@
 </template>
 <script setup>
 import { onMounted } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 
 onMounted(() => {
