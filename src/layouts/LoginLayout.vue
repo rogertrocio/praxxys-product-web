@@ -10,7 +10,7 @@
             Sign in to your account
           </h1>
           <form class="space-y-4 md:space-y-6" @submit.prevent="login">
-            <InputText
+            <BaseInput
               v-model="model.username"
               label="Username"
               placeholder="Username or Email"
@@ -18,7 +18,7 @@
               @keydown="errors.username = null"
               :error="errors.username" />
 
-            <PasswordText v-model="model.password" label="Password" />
+            <BasePassword v-model="model.password" label="Password" />
 
             <div class="flex items-center justify-between">
               <Checkbox v-model="model.remember" label="Remember me" />
@@ -40,8 +40,8 @@
 </template>
 <script setup>
 import { reactive } from 'vue'
-import InputText from '@/components/base/BaseInput.vue'
-import PasswordText from '@/components/base/BasePassword.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BasePassword from '@/components/base/BasePassword.vue'
 import Checkbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import logo from '../assets/praxxys-logo.webp'

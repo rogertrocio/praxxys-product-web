@@ -41,7 +41,7 @@ const navigations = ref([
   },
   {
     name: 'Create Product',
-    link: '#',
+    link: '/product/create',
     icon: 'plus'
   }
 ])
