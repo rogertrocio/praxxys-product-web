@@ -1,3 +1,4 @@
+import PageNotFound from '@/views/PageNotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -26,6 +27,15 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../layouts/LoginLayout.vue'),
+    },
+
+    /**
+     * No existing route
+     */
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'page-not-found',
+      component: PageNotFound
     },
   ],
 })
