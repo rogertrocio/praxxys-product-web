@@ -85,12 +85,12 @@
 
     <ConfirmDialog
       :visible="showProductDeleteConfirmDialog"
+      title="Delete Product"
       message="Are you sure you want to delete Product A? This action will remove it from the product list."
       icon="triangle-exclamation"
       :loading="false"
       @close="showProductDeleteConfirmDialog = false"
-      @confirm="1"
-    />
+      @confirm="1"/>
   </div>
 </template>
 <script setup>

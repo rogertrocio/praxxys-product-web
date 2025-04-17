@@ -15,10 +15,11 @@
               label="Username"
               placeholder="Username or Email"
               class="w-full"
-              @keydown="errors.username = null"
-              :error="errors.username" />
+              @keydown="store.errors.username = null"
+              :error="store.errors.username?.[0] || null"
+              required />
 
-            <BasePassword v-model="model.password" label="Password" />
+            <BasePassword v-model="model.password" label="Password" required />
 
             <div class="flex items-center justify-between">
               <Checkbox v-model="model.remember" label="Remember me" />
@@ -26,7 +27,11 @@
               <a href="#" class="text-sm font-medium text-teal-600 hover:underline">Forgot password?</a >
             </div>
 
-            <BaseButton type="button" label="Sign in" class="w-full text-white bg-teal-600 hover:bg-teal-700" />
+            <BaseButton
+              type="submit"
+              label="Sign in"
+              class="w-full text-white bg-teal-600 hover:bg-teal-700"
+              :loading="store.loading" />
 
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?
@@ -39,24 +44,29 @@
   </div>
 </template>
 <script setup>
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BasePassword from '@/components/base/BasePassword.vue'
 import Checkbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import logo from '../assets/praxxys-logo.webp'
+import { useAuthStore } from '@/stores/auth'
 
-const model = reactive({
+const store = useAuthStore()
+
+const model = ref({
   username: null,
   password: null,
   remember: false,
 })
 
-const errors = reactive({
-  username: null,
-})
+const login = async () => {
+  try {
+    await store.login(model.value)
 
-const login = () => {
-  console.log(model)
+    location.reload()
+  } catch (e) {
+    console.log(e)
+  }
 }
 </script>

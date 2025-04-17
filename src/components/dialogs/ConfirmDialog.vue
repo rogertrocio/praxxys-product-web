@@ -10,7 +10,8 @@
         </button>
         <div class="p-4 md:p-5 text-center">
             <fa-icon :icon="props.icon" class="text-[48px] mt-6" :class="[props.iconColor]" />
-            <p class="my-6 text-lg font-normal text-gray-600">{{ props.message }}</p>
+            <p class="text-xl my-4 font-semibold text-gray-800">{{ props.title }}</p>
+            <p class="mb-10 font-normal text-gray-600">{{ props.message }}</p>
 
             <div class="flex items-center justify-center gap-3">
               <BaseButton
@@ -40,6 +41,10 @@ const props = defineProps({
   visible: {
     type: Boolean,
     default: false,
+    required: true,
+  },
+  title: {
+    type: String,
     required: true,
   },
   message: {
