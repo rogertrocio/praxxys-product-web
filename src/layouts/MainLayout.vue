@@ -17,4 +17,10 @@
 import { RouterView } from 'vue-router'
 import MainHeader from '@/components/partials/MainHeader.vue'
 import MainSidebar from '@/components/partials/MainSidebar.vue'
+import { initFlowbite } from 'flowbite'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  initFlowbite()
+})
 </script>

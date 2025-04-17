@@ -41,7 +41,7 @@
           <td class="px-6 py-4">{{ product.date_time }}</td>
           <td class="px-6 py-4 flex items-center gap-2">
             <BaseButton type="button" label="Edit" class="text-white bg-gray-600 hover:bg-gray-700" />
-            <BaseButton type="button" label="Delete" class="text-white bg-red-600 hover:bg-red-700" />
+            <BaseButton type="button" label="Delete" class="text-white bg-red-600 hover:bg-red-700" @click="showProductDeleteConfirmDialog = true" />
           </td>
         </tr>
       </tbody>
@@ -82,6 +82,15 @@
         </li>
       </ul>
     </div>
+
+    <ConfirmDialog
+      :visible="showProductDeleteConfirmDialog"
+      message="Are you sure you want to delete Product A? This action will remove it from the product list."
+      icon="triangle-exclamation"
+      :loading="false"
+      @close="showProductDeleteConfirmDialog = false"
+      @confirm="1"
+    />
   </div>
 </template>
 <script setup>
@@ -89,10 +98,11 @@ import { ref } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
 
+const showProductDeleteConfirmDialog = ref(false)
 const search = ref('')
 const category = ref(null)
-
 const categories = ref([
   {
     label: 'Smartphone',
