@@ -23,12 +23,22 @@
       </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div v-for="(src, i) in imageSrc" :key="i">
-            <img class="relative h-auto max-w-full border rounded-lg hover:shadow-lg transition ease-in-out hover:-translate-y-1 hover:scale-110" :src="src" alt="Photo">
-            <fa-icon icon="circle-xmark" size="xl" class="absolute right-0 top-0"/>
+          <div v-for="(src, i) in imageSrc" :key="i" class="relative group rounded-lg hover:shadow-lg">
+            <img class="h-auto max-w-full rounded-lg" :src="src" alt="Photo">
+            <fa-icon
+              icon="circle-xmark"
+              size="xl"
+              class="absolute right-0 top-0 mr-3 mt-3 text-red-400 cursor-pointer group-hover:text-red-600" />
+          </div>
+          <div class="relative group rounded-lg hover:shadow-lg">
+            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+            <fa-icon
+              icon="circle-xmark"
+              size="xl"
+              class="absolute right-0 top-0 mr-3 mt-3 text-red-400 cursor-pointer group-hover:text-red-600" />
           </div>
           <div>
-            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+
           </div>
         </div>
       </div>

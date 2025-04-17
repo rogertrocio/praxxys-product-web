@@ -56,5 +56,5 @@ import StepOne from '@/components/product/StepOne.vue'
 import StepTwo from '@/components/product/StepTwo.vue';
 import StepThree from '@/components/product/StepThree.vue';
 
-const activeStep = ref(3)
+const activeStep = ref(2)
 </script>
