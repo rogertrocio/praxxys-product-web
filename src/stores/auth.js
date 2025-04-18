@@ -32,6 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
       cookies.set('praxxys-token', response.data.data.token, { sameSite: 'Lax' })
       return response.data.data
     } catch (e) {
+      errors.value = e.response?.data?.errors
       errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to login. Please try again.'
       throw e
     } finally {

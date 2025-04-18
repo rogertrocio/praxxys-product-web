@@ -51,8 +51,11 @@ import Checkbox from '@/components/base/BaseCheckbox.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import logo from '../assets/praxxys-logo.webp'
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const store = useAuthStore()
+const router = useRouter()
 
 const model = ref({
   username: null,
@@ -63,8 +66,8 @@ const model = ref({
 const login = async () => {
   try {
     await store.login(model.value)
-
-    location.reload()
+    toast.success('Logged in successfully.')
+    router.go('/')
   } catch (e) {
     console.log(e)
   }

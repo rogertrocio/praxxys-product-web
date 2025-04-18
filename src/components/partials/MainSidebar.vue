@@ -33,7 +33,7 @@
   <ConfirmDialog
     :visible="showLogoutConfirmDialog"
     title="Sign Out"
-    message="You are attemting to logout in the app. Are you sure?"
+    message="You are attempting to logout in the app. Are you sure?"
     icon="door-open"
     icon-color="text-teal-600"
     confirm-label="Sign out"
@@ -43,13 +43,16 @@
     @confirm="logout"/>
 </template>
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import avatar from '@/assets/avatar-male.png'
 import { useAuthStore } from '@/stores/auth'
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const store = useAuthStore()
+const router = useRouter()
 const showLogoutConfirmDialog = ref(false)
 const navigations = ref([
   {
@@ -68,7 +71,8 @@ const logout = async () => {
   try {
     await store.logout()
     showLogoutConfirmDialog.value = false
-    location.reload()
+    toast.success('Signed out successfully.')
+    router.go('/login')
   } catch (e) {
     console.log(e)
   }
