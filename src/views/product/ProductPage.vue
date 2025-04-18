@@ -61,41 +61,10 @@
       </tbody>
     </table>
 
-    <div class="flex flex-row justify-end">
-      <ul class="flex items-center -space-x-px h-10 text-base">
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Previous</span>
-            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-        </li>
-        <li>
-          <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-teal-600 border border-teal-300 bg-teal-50 hover:bg-teal-100 hover:text-teal-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Next</span>
-            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ProductPagination
+      :pagination="storeProduct.pagination"
+      :current-page="currentPage"
+      @update-page="onPageChange" />
 
     <ConfirmDialog
       :visible="showProductDeleteConfirmDialog"
@@ -113,6 +82,7 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
 import ImagePlaceholder from '@/assets/image-placeholder.png'
+import ProductPagination from '@/components/product/ProductPagination.vue'
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
 import { useProductStore } from '@/stores/product'
 import { useCommonStore } from '@/stores/common'
@@ -121,14 +91,24 @@ import { debounce } from 'lodash'
 const storeProduct = useProductStore()
 const storeCommon  = useCommonStore()
 const showProductDeleteConfirmDialog = ref(false)
+const currentPage = ref(1)
 
 watch(() => storeProduct.filter.search, debounce(() => {
+  currentPage.value = 1
   storeProduct.getProducts()
 }, 500))
-watch(() => storeProduct.filter.category, () => storeProduct.getProducts())
+watch(() => storeProduct.filter.category, () => {
+  currentPage.value = 1
+  storeProduct.getProducts()
+})
 
 onMounted(() => {
   storeProduct.getProducts()
   storeCommon.getCategories()
 })
+
+const onPageChange = (e) => {
+  currentPage.value = e
+  storeProduct.getProducts(currentPage.value)
+}
 </script>

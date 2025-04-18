@@ -10,6 +10,7 @@ export const useProductStore = defineStore('product', () => {
     current_page: 1,
     per_page: 10,
     total: 0,
+    links: [],
   })
   const filter = reactive({
     search: '',
@@ -31,6 +32,11 @@ export const useProductStore = defineStore('product', () => {
     try {
       const response = await api.get('/product', { params })
       products.value = response.data.data
+
+      pagination.value.current_page = response.data.meta.current_page
+      pagination.value.per_page = response.data.meta.per_page
+      pagination.value.total = response.data.meta.total
+      pagination.value.links = response.data.meta.links
     } catch (e) {
       console.log(e)
     } finally {
