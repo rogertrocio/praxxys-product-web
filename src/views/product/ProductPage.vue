@@ -8,11 +8,22 @@
 
     <div class="flex flex-row items-center justify-between mb-10">
       <div class="flex items-center gap-3">
-        <BaseInput v-model="search" placeholder="Search" class="w-96" />
+        <BaseInput
+          v-model="storeProduct.filter.search"
+          placeholder="Search"
+          class="w-96" />
 
-        <BaseSelect v-model="category" :options="categories" option-label="Select Category"  class="w-60 "/>
+        <BaseSelect
+          v-model="storeProduct.filter.category"
+          :options="storeCommon.categories"
+          option-label="Select Category"
+          class="w-60 " />
 
-        <BaseButton type="button" label="Clear Filter" class="w-auto text-teal-600 bg-white border border-gray-300 hover:bg-gray-100" />
+        <BaseButton
+          type="button"
+          label="Clear Filter"
+          class="w-auto text-teal-600 bg-white border border-gray-300 hover:bg-gray-100"
+          @click="storeProduct.clearFilter" />
       </div>
 
       <BaseButton type="button" label="Create" class="w-40 text-white bg-teal-600 hover:bg-teal-700" />
@@ -30,14 +41,17 @@
       </thead>
       <tbody>
         <tr
-          v-for="product in products"
+          v-for="product in storeProduct.products"
           :key="product.id"
           class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b border-gray-200">
           <td class="px-6 py-4">
-            <img src="@/assets/image-placeholder.png" class="h-10 rounded" alt="image">
+            <div
+              class="w-14 h-10 bg-cover bg-center bg-no-repeat bg-gray-500 rounded"
+              :style="{ backgroundImage:  product.images.length > 0 ? `url(${product.images[0].url})` : `url(${ImagePlaceholder})` }">
+            </div>
           </td>
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ product.name }}</th>
-          <td class="px-6 py-4">{{ product.category }}</td>
+          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ product.name }}</td>
+          <td class="px-6 py-4">{{ product.category.name }}</td>
           <td class="px-6 py-4">{{ product.date_time }}</td>
           <td class="px-6 py-4 flex items-center gap-2">
             <BaseButton type="button" label="Edit" class="text-white bg-gray-600 hover:bg-gray-700" />
@@ -94,59 +108,27 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSelect from '@/components/base/BaseSelect.vue'
+import ImagePlaceholder from '@/assets/image-placeholder.png'
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
+import { useProductStore } from '@/stores/product'
+import { useCommonStore } from '@/stores/common'
+import { debounce } from 'lodash'
 
+const storeProduct = useProductStore()
+const storeCommon  = useCommonStore()
 const showProductDeleteConfirmDialog = ref(false)
-const search = ref('')
-const category = ref(null)
-const categories = ref([
-  {
-    label: 'Smartphone',
-    value: 1,
-  }, {
-    label: 'Tablet',
-    value: 2,
-  }, {
-    label: 'Headphone',
-    value: 3,
-  },
-])
 
-const products = ref([
-  {
-    id: 1,
-    name: 'Samsung A50',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, dicta?',
-    category: 'Smartphone',
-    date_time: '2025-01-01 13:30:00',
-  }, {
-    id: 2,
-    name: 'Iphone 15 pro',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, dicta?',
-    category: 'Smartphone',
-    date_time: '2025-01-01 13:30:00',
-  }, {
-    id: 3,
-    name: 'Anker Soundcore',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, dicta?',
-    category: 'Bluetooth Speaker',
-    date_time: '2025-01-01 13:30:00',
-  }, {
-    id: 4,
-    name: 'Lenovo Tablet',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, dicta?',
-    category: 'Tablet',
-    date_time: '2025-01-01 13:30:00',
-  }, {
-    id: 5,
-    name: 'Bose Headphone',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, dicta?',
-    category: 'Headphone',
-    date_time: '2025-01-01 13:30:00',
-  }
-])
+watch(() => storeProduct.filter.search, debounce(() => {
+  storeProduct.getProducts()
+}, 500))
+watch(() => storeProduct.filter.category, () => storeProduct.getProducts())
+
+onMounted(() => {
+  storeProduct.getProducts()
+  storeCommon.getCategories()
+})
 </script>
