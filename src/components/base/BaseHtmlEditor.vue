@@ -1,7 +1,14 @@
 <template>
   <div>
     <label v-if="label" for="" class="block mb-2 text-sm font-medium text-gray-900">{{ label }}</label>
-    <div class="w-full border border-gray-200 rounded-lg bg-gray-50">
+    <div
+      class="w-full border rounded-lg"
+      :class="{
+        'bg-gray-50 border-gray-300 text-gray-900 focus:ring-teal-500 focus:border-teal-500':
+          error === null,
+        ' bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500':
+          error !== null,
+      }">
       <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-600">
         <div class="flex flex-wrap items-center">
           <div class="flex items-center space-x-1 rtl:space-x-reverse flex-wrap">
@@ -73,6 +80,7 @@
           class="block w-full text-gray-800 bg-white border-0 focus:ring-0" />
       </div>
     </div>
+    <p v-if="error" class="mt-2 text-sm text-red-600">{{ error }}</p>
   </div>
 </template>
 <script setup>
@@ -89,7 +97,11 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: '',
-  }
+  },
+  error: {
+    type: String,
+    default: null,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])

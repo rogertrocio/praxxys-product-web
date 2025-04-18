@@ -5,7 +5,13 @@
       :value="modelValue"
       @change="$emit('update:modelValue', $event.target.value)"
       v-bind="$attrs"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-3">
+      class="border text-sm rounded-lg block p-3"
+      :class="{
+        'bg-gray-50 border-gray-300 text-gray-900 focus:ring-teal-500 focus:border-teal-500':
+          error === null,
+        ' bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500':
+          error !== null,
+      }">
       <option value="" disabled>{{ optionLabel }}</option>
       <option
         v-for="(option, index) in options"
@@ -14,6 +20,7 @@
         {{ option.label }}
       </option>
     </select>
+    <p v-if="error" class="mt-2 text-sm text-red-600">{{ error }}</p>
   </div>
 </template>
 <script setup>
@@ -33,7 +40,11 @@ defineProps({
   options: {
     type: Array,
     required: true
-  }
+  },
+  error: {
+    type: String,
+    default: null,
+  },
 })
 
 defineEmits(['update:modelValue'])

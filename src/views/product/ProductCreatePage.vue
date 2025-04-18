@@ -8,11 +8,11 @@
 
     <!-- Stepper -->
     <ol class="flex items-center w-full mb-10 p-3 space-x-2 text-sm font-medium text-center text-gray-500 bg-white sm:text-base  sm:p-4 sm:space-x-4 rtl:space-x-reverse">
-      <li class="flex items-center" :class="{ 'text-teal-600' : activeStep >= 1 }">
+      <li class="flex items-center" :class="{ 'text-teal-600' : step >= 1 }">
         <span
           class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0"
-          :class="{ 'border-teal-600 ' : activeStep >= 1  }">
-            <fa-icon icon="check" v-if="activeStep > 1" />
+          :class="{ 'border-teal-600 ' : step >= 1  }">
+            <fa-icon icon="check" v-if="step > 1" />
              <span v-else>1</span>
         </span>
         Product <span class="hidden sm:inline-flex sm:ms-2">Information</span>
@@ -20,11 +20,11 @@
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
         </svg>
       </li>
-      <li class="flex items-center" :class="{ 'text-teal-600' : activeStep >= 2 }">
+      <li class="flex items-center" :class="{ 'text-teal-600' : step >= 2 }">
         <span
           class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0"
-          :class="{'border-teal-600 ' : activeStep >= 2 , 'border-gray-500' : activeStep !== 2 }">
-            <fa-icon icon="check" v-if="activeStep > 2" />
+          :class="{'border-teal-600 ' : step >= 2 , 'border-gray-500' : step !== 2 }">
+            <fa-icon icon="check" v-if="step > 2" />
             <span v-else>2</span>
         </span>
         Image <span class="hidden sm:inline-flex sm:ms-2">Attachment</span>
@@ -32,10 +32,10 @@
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
         </svg>
       </li>
-      <li class="flex items-center" :class="{ 'text-teal-600' : activeStep === 3 }">
+      <li class="flex items-center" :class="{ 'text-teal-600' : step === 3 }">
         <span
           class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0"
-          :class="{'border-teal-600 ' : activeStep === 3 , 'border-gray-500' : activeStep !== 3 }">
+          :class="{'border-teal-600 ' : step === 3 , 'border-gray-500' : step !== 3 }">
             3
         </span>
         Submit
@@ -43,18 +43,74 @@
     </ol>
 
     <!-- Step Form -->
-     <StepOne v-if="activeStep === 1" />
+    <StepOne
+      v-if="step === 1"
+      :name="model.name"
+      :category_id="model.category_id"
+      :description="model.description"
+      @next="firstStep" />
 
-     <StepTwo v-if="activeStep === 2" />
+    <StepTwo
+      v-if="step === 2"
+      :images="model.images"
+      @back="step = 1"
+      @next="secondStep" />
 
-     <StepThree v-if="activeStep === 3" />
+    <StepThree
+      v-if="step === 3"
+      :date_time="model.date_time"
+      @back="step = 2"
+      @next="thirdStep" />
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
 import StepOne from '@/components/product/StepOne.vue'
-import StepTwo from '@/components/product/StepTwo.vue';
-import StepThree from '@/components/product/StepThree.vue';
+import StepTwo from '@/components/product/StepTwo.vue'
+import StepThree from '@/components/product/StepThree.vue'
+import { useProductStore } from '@/stores/product'
+import { toast } from 'vue3-toastify'
+import { useRouter } from 'vue-router'
+import { useDate } from '@/composables/date'
 
-const activeStep = ref(2)
+const store = useProductStore()
+const router = useRouter()
+const date = useDate()
+const step = ref(1)
+const model = ref({
+  name: null,
+  category_id: null,
+  description: null,
+  date_time: null,
+  images: [],
+})
+
+const firstStep = (e) => {
+  step.value = 2
+  model.value.name = e.name
+  model.value.category_id = e.category_id
+  model.value.description = e.description
+}
+
+const secondStep = (e) => {
+  step.value = 3
+  model.value.images = e.images
+}
+
+const thirdStep = (e) => {
+  model.value.date_time = date.format(e.date_time)
+
+  submit()
+}
+
+const submit = async () => {
+  try {
+    await store.saveProduct(model.value)
+    toast.success('Product created successfully.')
+    router.push('/')
+  } catch (e) {
+    console.log(e)
+    toast.error(`${store.errorMessage}`)
+  }
+}
 </script>

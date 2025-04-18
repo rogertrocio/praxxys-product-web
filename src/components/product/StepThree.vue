@@ -9,7 +9,13 @@
     </div>
     <div class="w-9/12 flex py-4 justify-center">
       <div class="w-[700px] space-y-6">
-        <BaseDate v-model="model.date_time" type="datetime-local" step="1" class="w-full" />
+        <BaseDate
+          v-model="model.date_time"
+          @change="store.errors.date_time = null"
+          :error="store.errors.date_time?.[0] || null"
+          type="datetime-local"
+          step="1"
+          class="w-full" />
       </div>
     </div>
   </div>
@@ -17,9 +23,28 @@
   <div class="flex flex-row">
     <div class="w-3/12 pr-4 py-4"></div>
     <div class="w-9/12 flex py-4 justify-center">
-      <div class="w-[700px] flex justify-end gap-3">
-        <BaseButton type="button" label="Previous" class="text-gray-600 bg-white border border-gray-300 hover:bg-gray-100" />
-        <BaseButton type="button" label="Submit" class="text-white bg-teal-600 hover:bg-teal-700" />
+      <div class="w-[700px] flex items-center justify-between">
+        <BaseButton
+          type="button"
+          label="Cancel"
+          class="text-gray-600 bg-white border border-gray-300 hover:bg-gray-100"
+          @click="router.push('/'), store.errors = {}" />
+
+        <div class="flex justify-end gap-3">
+          <BaseButton
+            type="button"
+            label="Previous"
+            class="text-gray-600 bg-white border border-gray-300 hover:bg-gray-100"
+            @click="emit('back')" />
+
+          <BaseButton
+            type="button"
+            label="Submit"
+            class="text-white bg-teal-600 hover:bg-teal-700"
+            :loading="store.loading"
+            :disabled="store.loading"
+            @click="emit('next', model)" />
+        </div>
       </div>
     </div>
   </div>
@@ -27,12 +52,22 @@
 <script setup>
 import { ref } from 'vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseDate from '@/components/base/BaseDate.vue';
+import BaseDate from '@/components/base/BaseDate.vue'
+import { useRouter } from 'vue-router'
+import { useProductStore } from '@/stores/product'
 
+const props = defineProps({
+  date_time: {
+    type: String,
+    default: null
+  }
+})
+
+const emit = defineEmits(['back', 'next'])
+
+const router = useRouter()
+const store = useProductStore()
 const model = ref({
-  name: null,
-  category_id: null,
-  description: null,
-  date_time: null,
+  date_time: props.date_time,
 })
 </script>

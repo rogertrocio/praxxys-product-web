@@ -50,8 +50,16 @@
     <div class="w-9/12 flex py-4 justify-center">
       <div class="w-[700px] flex justify-end gap-3">
 
-        <BaseButton type="button" label="Previous" class="text-gray-600 bg-white border border-gray-300 hover:bg-gray-100" />
-        <BaseButton type="button" label="Next Step" class="text-white bg-teal-600 hover:bg-teal-700" />
+        <BaseButton
+          type="button"
+          label="Previous"
+          class="text-gray-600 bg-white border border-gray-300 hover:bg-gray-100"
+          @click="emit('back')" />
+        <BaseButton
+          type="button"
+          label="Next Step"
+          class="text-white bg-teal-600 hover:bg-teal-700"
+          @click="emit('next', model)" />
       </div>
     </div>
   </div>
@@ -60,10 +68,17 @@
 import { ref } from 'vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 
+const props = defineProps({
+  images: {
+    type: Array,
+    required: true
+  }
+})
+
+const emit = defineEmits(['back', 'next'])
+
 const model = ref({
-  name: null,
-  category_id: null,
-  description: null,
+  images: props.images
 })
 
 const imageSrc = ref([])

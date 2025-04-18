@@ -44,6 +44,21 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
+  const saveProduct = async (model) => {
+    loading.value = true
+
+    try {
+      const response = await api.post('/product', model)
+      return response.data.data
+    } catch (e) {
+      errors.value = e.response?.data?.errors
+      errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to login. Please try again.'
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
   const deleteProduct = async (id) => {
     loading.value = true
 
@@ -72,6 +87,7 @@ export const useProductStore = defineStore('product', () => {
     errors,
     errorMessage,
     getProducts,
+    saveProduct,
     deleteProduct,
     clearFilter,
   }

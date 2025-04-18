@@ -26,7 +26,11 @@
           @click="storeProduct.clearFilter" />
       </div>
 
-      <BaseButton type="button" label="Create" class="w-40 text-white bg-teal-600 hover:bg-teal-700" />
+      <BaseButton
+        type="button"
+        label="Create"
+        class="w-40 text-white bg-teal-600 hover:bg-teal-700"
+        @click="router.push('/product/create')" />
     </div>
 
     <template v-if="storeProduct.products.length > 0">
@@ -97,7 +101,9 @@ import { useProductStore } from '@/stores/product'
 import { useCommonStore } from '@/stores/common'
 import { debounce } from 'lodash'
 import { toast } from 'vue3-toastify'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const storeProduct = useProductStore()
 const storeCommon  = useCommonStore()
 const selectedProduct = ref({})
