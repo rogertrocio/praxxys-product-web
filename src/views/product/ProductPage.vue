@@ -56,7 +56,11 @@
             <td class="px-6 py-4">{{ product.date_time }}</td>
             <td class="px-6 py-4 flex items-center gap-2">
               <BaseButton type="button" label="Edit" class="text-white bg-gray-600 hover:bg-gray-700" />
-              <BaseButton type="button" label="Delete" class="text-white bg-red-600 hover:bg-red-700" @click="showProductDeleteConfirmDialog = true" />
+              <BaseButton
+                type="button"
+                label="Delete"
+                class="text-white bg-red-600 hover:bg-red-700"
+                @click="showProductDeleteConfirmDialog = true, selectedProduct = product" />
             </td>
           </tr>
         </tbody>
@@ -77,7 +81,7 @@
       icon="triangle-exclamation"
       :loading="false"
       @close="showProductDeleteConfirmDialog = false"
-      @confirm="1"/>
+      @confirm="confirmDelete"/>
   </div>
 </template>
 <script setup>
@@ -92,9 +96,11 @@ import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
 import { useProductStore } from '@/stores/product'
 import { useCommonStore } from '@/stores/common'
 import { debounce } from 'lodash'
+import { toast } from 'vue3-toastify'
 
 const storeProduct = useProductStore()
 const storeCommon  = useCommonStore()
+const selectedProduct = ref({})
 const showProductDeleteConfirmDialog = ref(false)
 const currentPage = ref(1)
 
@@ -115,5 +121,20 @@ onMounted(() => {
 const onPageChange = (e) => {
   currentPage.value = e
   storeProduct.getProducts(currentPage.value)
+}
+
+const confirmDelete = async () => {
+  try {
+    storeProduct.deleteProduct(selectedProduct.value.id)
+
+    toast.success(`${selectedProduct.value.name} deleted successfully.`)
+    selectedProduct.value = {}
+    showProductDeleteConfirmDialog.value = false
+    currentPage.value = (storeProduct.products.length === 1 && currentPage.value !== 1) ? currentPage.value - 1 : currentPage.value
+
+    storeProduct.getProducts(currentPage.value)
+  } catch (e) {
+    toast.error(`${storeProduct.errorMessage}`)
+  }
 }
 </script>

@@ -44,6 +44,20 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
+  const deleteProduct = async (id) => {
+    loading.value = true
+
+    try {
+      const response = await api.delete(`/product/${id}`)
+      return response
+    } catch (e) {
+      errorMessage.value = e.response?.data?.message || 'An error has occurred while deleting the product. Please try again.'
+      console.log(e)
+    } finally {
+      loading.value = false
+    }
+  }
+
   const clearFilter = () => {
     filter.search = ''
     filter.category = null
@@ -58,6 +72,7 @@ export const useProductStore = defineStore('product', () => {
     errors,
     errorMessage,
     getProducts,
+    deleteProduct,
     clearFilter,
   }
 })
