@@ -12,6 +12,7 @@
         <li v-for="(navigation, index) in navigations" :key="index">
           <RouterLink
             :to="navigation.link"
+            exact-active-class="bg-gray-100"
             class="flex items-center gap-3 p-2 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 group">
             <fa-icon :icon="['fas', navigation.icon]" size="lg" class="text-gray-500" />
             {{ navigation.name }}

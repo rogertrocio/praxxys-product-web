@@ -85,7 +85,7 @@
     <ConfirmDialog
       :visible="showProductDeleteConfirmDialog"
       title="Delete Product"
-      message="Are you sure you want to delete Product A? This action will remove it from the product list."
+      :message="`Are you sure you want to delete <strong>${selectedProduct.name}</strong>? This action will remove it from the product list.`"
       icon="triangle-exclamation"
       :loading="false"
       @close="showProductDeleteConfirmDialog = false"
