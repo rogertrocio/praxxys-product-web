@@ -45,8 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const response = await api.post('/auth/logout')
-      cookies.remove('praxxys-user')
-      cookies.remove('praxxys-token')
+      removeToken()
       return response
     } catch (e) {
       errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to logout. Please try again.'
@@ -54,6 +53,13 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       loading.value = false
     }
+  }
+
+  const removeToken = () => {
+    cookies.remove('praxxys-user')
+    cookies.remove('praxxys-token')
+    user.value = null
+    token.value = null
   }
 
   return {
@@ -65,5 +71,6 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     login,
     logout,
+    removeToken,
   }
 })
