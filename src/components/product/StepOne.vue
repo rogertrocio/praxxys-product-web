@@ -95,7 +95,7 @@ const schema = z.object({
     .min(2, { message:  'Name must be at aleast 2 characters.'})
     .max(150, { message:  'Name may not be greater than 150 characters.'})
     .refine((val) => val.trim().length > 0, { message: 'Name is required.' }),
-  category_id: z.string({ message: 'Category is required.' }),
+  category_id: z.union([z.string(), z.number()], { message: 'Category is required.' }),
   description: z.nullable(
     z.string()
       .min(3, { message:  'Description must be at aleast 3 characters.'})

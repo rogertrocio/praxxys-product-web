@@ -22,7 +22,8 @@ app.use(createPinia())
 app.use(router, api)
 app.use(Vue3Toastify, {
   autoClose: 3000,
-  theme: 'colored'
+  theme: 'colored',
+  clearOnUrlChange: false,
 })
 app.component('fa-icon', FontAwesomeIcon)
 app.mount('#app')
