@@ -53,12 +53,24 @@ export const useProductStore = defineStore('product', () => {
   const saveProduct = async (model) => {
     loading.value = true
 
+    const formData = new FormData()
+    formData.append('name', model.name)
+    formData.append('category_id', model.category_id)
+    formData.append('description', model.description)
+    formData.append('date_time', model.date_time)
+
+    if (model.images.length > 0) {
+      for (const image of model.images) {
+        formData.append('images[]', image)
+      }
+    }
+
     try {
-      const response = await api.post('/product', model)
+      const response = await api.post('/product', formData)
       return response.data.data
     } catch (e) {
       errors.value = e.response?.data?.errors
-      errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to login. Please try again.'
+      errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to save product. Please try again.'
       throw e
     } finally {
       loading.value = false
