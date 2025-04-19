@@ -77,6 +77,58 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
+  const getProduct = async (id) => {
+    loading.value = true
+
+    try {
+      const response = await api.get(`/product/${id}`)
+      product.value = response.data.data
+      return response.data.data
+    } catch (e) {
+      errorMessage.value = e.response?.data?.message || 'An error has occurred while fetching the product. Please try again.'
+      console.log(e)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const updateProduct = async (id, model) => {
+    loading.value = true
+
+    const formData = new FormData()
+    formData.append('name', model.name)
+    formData.append('category_id', model.category_id)
+    formData.append('description', model.description)
+    formData.append('date_time', model.date_time)
+
+    if (model.images.length > 0) {
+      for (const image of model.images) {
+        formData.append('images[]', image)
+      }
+    }
+
+    if (model.old_images.length > 0) {
+      for (const oldImage of model.old_images) {
+        formData.append('old_images[]', oldImage.id)
+      }
+    } else {
+      formData.append('old_images[]', JSON.stringify([]))
+    }
+
+    formData.append('_method', 'PUT')
+
+    try {
+      const response = await api.post(`/product/${id}`, formData)
+      return response.data.data
+    } catch (e) {
+      errors.value = e.response?.data?.errors
+      errorMessage.value = e.response?.data?.message || 'An error has occurred while trying to update product. Please try again.'
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
   const deleteProduct = async (id) => {
     loading.value = true
 
@@ -105,7 +157,9 @@ export const useProductStore = defineStore('product', () => {
     errors,
     errorMessage,
     getProducts,
+    getProduct,
     saveProduct,
+    updateProduct,
     deleteProduct,
     clearFilter,
   }

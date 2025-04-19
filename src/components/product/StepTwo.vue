@@ -38,6 +38,15 @@
               class="absolute right-0 top-0 mr-3 mt-3 text-red-400 cursor-pointer group-hover:text-red-600"
               @click="model.images.splice(i, 1)" />
           </div>
+
+          <div v-for="(image, i) in model.old_images" :key="i" class="h-fit relative group rounded-lg hover:shadow-xl">
+            <img class="h-auto max-w-full rounded-lg" :src="image.url" alt="Photo">
+            <fa-icon
+              icon="circle-xmark"
+              size="xl"
+              class="absolute right-0 top-0 mr-3 mt-3 text-red-400 cursor-pointer group-hover:text-red-600"
+              @click="model.old_images.splice(i, 1)" />
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +80,10 @@ const props = defineProps({
   images: {
     type: Array,
     required: true
+  },
+  old_images: {
+    type: Array,
+    required: false,
   }
 })
 
@@ -78,7 +91,8 @@ const emit = defineEmits(['back', 'next'])
 
 const errorMessage = ref(null)
 const model = ref({
-  images: [...props.images]
+  images: [...props.images],
+  old_images: [...props.old_images],
 })
 
 const imageExtensions = ref([
@@ -128,7 +142,7 @@ const checkFileSize = (file) => {
 }
 
 const nextStep = () => {
-  if (model.value.images.length === 0) {
+  if (model.value.images.length === 0 && model.value.old_images.length === 0) {
     errorMessage.value = 'Add at least one (1) image.'
     toast.error(`${errorMessage.value}`)
     return false

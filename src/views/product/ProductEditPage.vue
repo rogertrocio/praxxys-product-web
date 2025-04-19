@@ -2,7 +2,7 @@
   <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
 
     <div class="mb-6">
-      <p class="text-xl font-semibold">Create Product</p>
+      <p class="text-xl font-semibold">Edit Product</p>
       <span class="text-gray-700">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
     </div>
 
@@ -43,40 +43,44 @@
     </ol>
 
     <!-- Step Form -->
-    <StepOne
-      v-if="step === 1"
-      :name="model.name"
-      :category_id="model.category_id"
-      :description="model.description"
-      @next="firstStep" />
+    <template v-if="dataLoaded">
+      <StepOne
+        v-if="step === 1"
+        :name="model.name"
+        :category_id="model.category_id"
+        :description="model.description"
+        @next="firstStep" />
 
-    <StepTwo
-      v-if="step === 2"
-      :images="model.images"
-      :old_images="[]"
-      @back="step = 1"
-      @next="secondStep" />
+      <StepTwo
+        v-if="step === 2"
+        :images="model.images"
+        :old_images="model.old_images"
+        @back="step = 1"
+        @next="secondStep" />
 
-    <StepThree
-      v-if="step === 3"
-      :date_time="model.date_time"
-      @back="step = 2"
-      @next="thirdStep" />
+      <StepThree
+        v-if="step === 3"
+        :date_time="model.date_time"
+        @back="step = 2"
+        @next="thirdStep" />
+    </template>
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import StepOne from '@/components/product/StepOne.vue'
 import StepTwo from '@/components/product/StepTwo.vue'
 import StepThree from '@/components/product/StepThree.vue'
 import { useProductStore } from '@/stores/product'
 import { toast } from 'vue3-toastify'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useDate } from '@/composables/date'
 
 const store = useProductStore()
 const router = useRouter()
+const route = useRoute()
 const date = useDate()
+const dataLoaded = ref(false)
 const step = ref(1)
 const model = ref({
   name: null,
@@ -84,6 +88,24 @@ const model = ref({
   description: null,
   date_time: null,
   images: [],
+  old_images: [],
+})
+
+onMounted(async () => {
+  try {
+    const product = await store.getProduct(route.params.id)
+
+    model.value.name = product.name
+    model.value.category_id = product.category_id
+    model.value.description = product.description
+    model.value.date_time = product.date_time
+    model.value.old_images = product.images
+
+    dataLoaded.value = true
+  } catch (e) {
+    console.log(e)
+    dataLoaded.value = false
+  }
 })
 
 const firstStep = (e) => {
@@ -95,7 +117,9 @@ const firstStep = (e) => {
 
 const secondStep = (e) => {
   step.value = 3
+  console.log('step 3', e.old_images)
   model.value.images = e.images
+  model.value.old_images = e.old_images
 }
 
 const thirdStep = (e) => {
@@ -106,8 +130,8 @@ const thirdStep = (e) => {
 
 const submit = async () => {
   try {
-    await store.saveProduct(model.value)
-    toast.success('Product created successfully.')
+    await store.updateProduct(route.params.id, model.value)
+    toast.success('Product updated successfully.')
     router.push('/')
   } catch (e) {
     console.log(e)

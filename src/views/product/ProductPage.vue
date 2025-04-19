@@ -59,7 +59,11 @@
             <td class="px-6 py-4">{{ product.category.name }}</td>
             <td class="px-6 py-4">{{ product.date_time }}</td>
             <td class="px-6 py-4 flex items-center gap-2">
-              <BaseButton type="button" label="Edit" class="text-white bg-gray-600 hover:bg-gray-700" />
+              <BaseButton
+                type="button"
+                label="Edit"
+                class="text-white bg-teal-600 hover:bg-teal-700"
+                @click="editProduct(product.id)" />
               <BaseButton
                 type="button"
                 label="Delete"
@@ -129,6 +133,10 @@ const onPageChange = (e) => {
   storeProduct.getProducts(currentPage.value)
 }
 
+const editProduct = (id) => {
+  router.push(`/product/${id}/edit`)
+}
+
 const confirmDelete = async () => {
   try {
     storeProduct.deleteProduct(selectedProduct.value.id)
@@ -141,6 +149,7 @@ const confirmDelete = async () => {
     storeProduct.getProducts(currentPage.value)
   } catch (e) {
     toast.error(`${storeProduct.errorMessage}`)
+    console.log(e)
   }
 }
 </script>
