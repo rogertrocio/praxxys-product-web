@@ -46,7 +46,7 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import avatar from '@/assets/avatar-male.png'
+import avatar from '@/assets/avatar.jpg'
 import { useAuthStore } from '@/stores/auth'
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue'
 import { useRouter } from 'vue-router'
@@ -65,6 +65,11 @@ const navigations = ref([
     name: 'Create Product',
     link: '/product/create',
     icon: 'plus'
+  },
+  {
+    name: 'Videos',
+    link: '/video',
+    icon: 'video'
   }
 ])
 
