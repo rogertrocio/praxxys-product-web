@@ -16,7 +16,12 @@ export const useProductStore = defineStore('product', () => {
     search: '',
     category: null,
   })
-  const errors = ref({})
+  const errors = ref({
+    name: null,
+    category_id: null,
+    description: null,
+    date_time: null,
+  })
   const errorMessage = ref(null)
 
   const getProducts = async (page = 1) => {
@@ -27,6 +32,7 @@ export const useProductStore = defineStore('product', () => {
     }
 
     if (filter.search !== null && filter.search !== '') params['filter[search]'] = filter.search
+
     if (filter.category !== null) params['filter[category]'] = filter.category
 
     try {

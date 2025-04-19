@@ -48,7 +48,7 @@
           type="button"
           label="Next Step"
           class="text-white bg-teal-600 hover:bg-teal-700"
-          @click="emit('next', model)" />
+          @click="nextStep" />
       </div>
     </div>
   </div>
@@ -62,6 +62,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { useRouter } from 'vue-router'
 import { useCommonStore } from '@/stores/common'
 import { useProductStore } from '@/stores/product'
+import { z } from 'zod'
 
 const props = defineProps({
   name: {
@@ -89,7 +90,35 @@ const model = ref({
   description: props.description
 })
 
+const schema = z.object({
+  name: z.string({ message: 'Name is required.' })
+    .min(2, { message:  'Name must be at aleast 2 characters.'})
+    .max(150, { message:  'Name may not be greater than 150 characters.'})
+    .refine((val) => val.trim().length > 0, { message: 'Name is required.' }),
+  category_id: z.string({ message: 'Category is required.' }),
+  description: z.nullable(
+    z.string()
+      .min(3, { message:  'Description must be at aleast 3 characters.'})
+  ),
+})
+
 onMounted(() => {
   storeCommon.getCategories()
 })
+
+const nextStep = () => {
+  const result = schema.safeParse(model.value)
+
+  if (!result.success) {
+    const formattedErrors = result.error.format()
+
+    storeProduct.errors.name = formattedErrors.name?._errors
+    storeProduct.errors.category_id = formattedErrors.category_id?._errors
+    storeProduct.errors.description = formattedErrors.description?._errors
+
+    return
+  }
+
+  emit('next', model.value)
+}
 </script>

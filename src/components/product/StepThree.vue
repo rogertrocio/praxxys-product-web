@@ -43,7 +43,7 @@
             class="text-white bg-teal-600 hover:bg-teal-700"
             :loading="store.loading"
             :disabled="store.loading"
-            @click="emit('next', model)" />
+            @click="submit" />
         </div>
       </div>
     </div>
@@ -55,6 +55,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import BaseDate from '@/components/base/BaseDate.vue'
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/product'
+import { z } from 'zod'
 
 const props = defineProps({
   date_time: {
@@ -70,4 +71,23 @@ const store = useProductStore()
 const model = ref({
   date_time: props.date_time,
 })
+
+const schema = z.object({
+  date_time: z.string({ message: 'Date and time is required.' }),
+})
+
+const submit = () => {
+  const result = schema.safeParse(model.value)
+
+  if (!result.success) {
+    const formattedErrors = result.error.format()
+
+    store.errors.date_time = formattedErrors.date_time?._errors
+
+    return
+  }
+
+  emit('next', model.value)
+}
+
 </script>
