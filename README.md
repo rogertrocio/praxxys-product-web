@@ -1,35 +1,45 @@
-# praxxys-product-web
+<p align="center"><a href="https://praxxys.global/" target="_blank"><img src="https://swiperight.praxxys.ph/themes/main/images/logo.png" width="400" alt="Praxxys Logo"></a></p>
 
-This template should help get you started developing with Vue 3 in Vite.
+## System Requirements
 
-## Recommended IDE Setup
+- NodeJS 18+
+- NPM 10+
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Installation
 
-## Customize configuration
+Clone the frontend praxxys-product-web repository.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```bash
+$ git clone git@github.com:rogertrocio/praxxys-product-web.git
+$ cd praxxys-product-web
+$ npm install
 ```
 
-### Compile and Hot-Reload for Development
+Copy the .env.example file and named `.env`.
 
-```sh
-npm run dev
+```bash
+$ cp .env.example .env
 ```
 
-### Compile and Minify for Production
+Compile and hot-reload the application for development and serve in `http://localhost:5173/`.
 
-```sh
-npm run build
+```bash
+$ npm run dev
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Compile and minify the application for production.
 
-```sh
-npm run lint
+```bash
+$ npm run build
+```
+
+## Accessing the Application
+
+To access the application, login the following credentials below.
+
+> Note: Make sure that the backend or praxxys-product-api is running.
+
+```
+username: john.doe | john.doe@praxxys.com
+password: password
 ```
